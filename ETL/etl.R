@@ -4,7 +4,7 @@ library(psrcelmer)
 library(tidyverse)
 library(bit64)
 
-accdb_path <- "C:\\Users\\cpeak\\OneDrive - Puget Sound Regional Council\\Projects\\2025\\plan_review_tracking\\Plan Review Tracking DB_copy.accdb;"
+accdb_path <- "X:\\Grow\\PLANREV\\Inbox and Status Tracking\\Plan Review Tracking DB.accdb;"
 conn_str <- paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", 
     accdb_path,
     "MaxBufferSize=2048;",
