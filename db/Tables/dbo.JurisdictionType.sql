@@ -1,9 +1,6 @@
 CREATE TABLE [dbo].[JurisdictionType]
 (
-[ID] [int] NOT NULL IDENTITY(1, 1),
-[JurisdictionType] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[SortOrder] [int] NULL
+[ID] [int] NULL,
+[JurisdictionType] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 ) ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[JurisdictionType] ADD CONSTRAINT [PK_JurisdictionType] PRIMARY KEY CLUSTERED ([ID]) ON [PRIMARY]
 GO
