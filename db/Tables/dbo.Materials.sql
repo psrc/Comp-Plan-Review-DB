@@ -1,6 +1,6 @@
 CREATE TABLE [dbo].[Materials]
 (
-[MaterialID] [int] NULL,
+[ID] [int] NOT NULL IDENTITY(1, 1),
 [Jurisdiction] [int] NULL,
 [MaterialDateReceived] [datetime] NULL,
 [MaterialTitle] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,

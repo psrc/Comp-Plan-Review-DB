@@ -1,6 +1,6 @@
 CREATE TABLE [dbo].[Jurisdiction]
 (
-[Jurisdiction] [int] NULL,
+[ID] [int] NOT NULL IDENTITY(1, 1),
 [DisplayName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [SortName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [JurisdictionType] [int] NULL,
