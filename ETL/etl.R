@@ -5,6 +5,7 @@ library(tidyverse)
 library(bit64)
 
 accdb_path <- "X:\\Grow\\PLANREV\\Inbox and Status Tracking\\Plan Review Tracking DB.accdb;"
+tables_to_ignore <- c("JurisdictionRaw")
 conn_str <- paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", 
     accdb_path,
     "MaxBufferSize=2048;",
@@ -26,6 +27,8 @@ sql_conn <- dbConnect(odbc::odbc(),
 df <- dbReadTable(access_conn, "tblActions")
 
 tables <- dbListTables(access_conn)
+
+tables <- setdiff(tables, tables_to_ignore)
 
 read_table <- function(table_name, conn) {
     tryCatch({
