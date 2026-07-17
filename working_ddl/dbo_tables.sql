@@ -74,7 +74,8 @@ CREATE TABLE [dbo].[Jurisdiction](
 	[AirportAdjacent] [bit] NULL,
 	[StaffContact] [int] NULL,
 	[CommerceContact] [int] NULL,
-	[FormSort] [int] NULL
+	[FormSort] [int] NULL,
+	constraint PK_Jurisdiction_ID primary key clustered (ID)
 ) ON [PRIMARY]
 GO
 
@@ -93,9 +94,18 @@ CREATE TABLE [dbo].[JurisdictionType](
 ) ON [PRIMARY]
 GO
 
+drop table if exists dbo.Staff;
+CREATE TABLE [dbo].[Staff](
+	[ID] [int] identity not NULL,
+	[Staff] [varchar](255) NULL,
+	[Staff_short] [varchar](255) NULL
+) ON [PRIMARY]
+GO
+
 drop table if exists dbo.Materials;
 CREATE TABLE [dbo].[Materials](
 	[ID] [int] identity not NULL,
+	[PlanID] int null,
 	[Jurisdiction] [int] NULL,
 	[MaterialDateReceived] [datetime] NULL,
 	[MaterialTitle] [varchar](255) NULL,
@@ -129,10 +139,24 @@ CREATE TABLE [dbo].[Materials](
 	[MaterialTypeTransportation] [bit] NULL,
 	[MaterialTypeUGAChange] [bit] NULL,
 	[MaterialTypeUtilities] [bit] NULL,
-	[DateAdded] [datetime] NULL
+	[DateAdded] [datetime] NULL,
+	constraint PK_Materials_id primary key clustered (ID),
+	constraint FK_Materials_Plan foreign key(PlanID)
+		references dbo.[Plan](ID)
 ) ON [PRIMARY]
 GO
 
+drop table if exists dbo.[MaterialsReviewer]
+CREATE TABLE dbo.[MaterialsReviewer](
+	[MaterialsID] int not null,
+	[StaffID] int not null,
+	[SectionAssignment] nvarchar(50) null,
+	constraint PK_MaterialsReviewer primary key clustered ([MaterialsID],[StaffID]),
+	constraint FK_MaterialsReviewer_Materials foreign key([MaterialsID])
+		references dbo.[Materials]([ID]),
+	constraint FK_MaterialsReviewer_Staff foreign key([StaffID])
+		references dbo.[Staff]([ID])
+)
 
 drop table if exists dbo.MaterialsPhase;
 CREATE TABLE [dbo].[MaterialsPhase](
@@ -169,13 +193,55 @@ CREATE TABLE [dbo].[Notes](
 GO
 
 
-drop table if exists dbo.Staff;
-CREATE TABLE [dbo].[Staff](
-	[ID] [int] identity not NULL,
-	[Staff] [varchar](255) NULL,
-	[Staff_short] [varchar](255) NULL
-) ON [PRIMARY]
-GO
+drop table if exists dbo.ShapefileStatus
+create table dbo.ShapefileStatus  -- added 7/16/26
+(
+    ID tinyint not null,
+    [Name] nvarchar(20) null,
+    constraint PK_ShapefileStatus_ID primary key clustered (ID)
+)
+
+
+
+drop table if exists dbo.[Plan] 
+create table dbo.[Plan] -- added 7/16/26
+(
+    ID int identity not null,
+    JurisdictionID int not null,
+    [Year] smallint not null,
+    AdoptionDate datetime2 null,
+    PublicationDate datetime2 null,
+    AppealDeadline datetime2 null,
+    AppealFiled nvarchar(20) null,
+    ShapefileStatusID tinyint null, 
+    GMPBDate datetime2 null,
+    [Name] nvarchar(50) null,
+    isCompleted bit null,
+    constraint PK_Plan_ID primary key clustered (ID),
+    constraint FK_Plan_Jurisdiction foreign key(JurisdictionID) 
+        references dbo.Jurisdiction ([ID]),
+    constraint FK_Plan_ShapefileStatus foreign key(ShapefileStatusID)
+        references dbo.ShapefileStatus ([ID])
+);
+
+
+drop table if exists dbo.PlanNote 
+create table dbo.PlanNote -- added 7/16/26
+(
+    ID bigint identity not null,
+    PlanID int not null,
+    MaterialID int null,
+	ReviewerID int not null,
+    Note nvarchar(2000) not null,
+	EntryDate datetime2 null,
+    constraint PK_PlanNote_ID primary key clustered (ID),
+    constraint FK_PlanNote_Plan foreign key(PlanID) 
+        references dbo.[Plan] ([ID]),
+    constraint FK_PlanNote_Materials foreign key(MaterialID) 
+        references dbo.[Materials] ([ID]),
+	constraint FK_PlanNote_ReviewerID foreign key(ReviewerID)
+		references dbo.[Staff]([ID])
+)
 
 
 
@@ -193,3 +259,7 @@ EXEC [dbo].merge_DatabaseChangeLog;
 EXEC [dbo].merge_Correspondence;
 EXEC [dbo].merge_CommerceContact;
 EXEC [dbo].merge_Jurisdiction;
+exec [dbo].merge_ShapefileStatus;
+exec dbo.bulk_insert_Plan 2026
+
+-- need sprocs for table Plan, 
