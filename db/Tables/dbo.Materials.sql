@@ -1,6 +1,7 @@
 CREATE TABLE [dbo].[Materials]
 (
 [ID] [int] NOT NULL IDENTITY(1, 1),
+[PlanID] [int] NULL,
 [Jurisdiction] [int] NULL,
 [MaterialDateReceived] [datetime] NULL,
 [MaterialTitle] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -36,4 +37,8 @@ CREATE TABLE [dbo].[Materials]
 [MaterialTypeUtilities] [bit] NULL,
 [DateAdded] [datetime] NULL
 ) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Materials] ADD CONSTRAINT [PK_Materials_id] PRIMARY KEY CLUSTERED ([ID]) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Materials] ADD CONSTRAINT [FK_Materials_Plan] FOREIGN KEY ([PlanID]) REFERENCES [dbo].[Plan] ([ID])
 GO

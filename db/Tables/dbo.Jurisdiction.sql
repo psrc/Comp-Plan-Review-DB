@@ -24,3 +24,7 @@ CREATE TABLE [dbo].[Jurisdiction]
 [FormSort] [int] NULL
 ) ON [PRIMARY]
 GO
+ALTER TABLE [dbo].[Jurisdiction] ADD CONSTRAINT [PK_Jurisdiciton_ID] PRIMARY KEY CLUSTERED ([ID]) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Jurisdiction] ADD CONSTRAINT [FK_Jurisdiction_StaffContact] FOREIGN KEY ([StaffContact]) REFERENCES [dbo].[Staff] ([ID])
+GO

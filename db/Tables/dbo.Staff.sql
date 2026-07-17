@@ -5,3 +5,5 @@ CREATE TABLE [dbo].[Staff]
 [Staff_short] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 ) ON [PRIMARY]
 GO
+ALTER TABLE [dbo].[Staff] ADD CONSTRAINT [PK_Staff_ID] PRIMARY KEY CLUSTERED ([ID]) ON [PRIMARY]
+GO
