@@ -39,8 +39,8 @@ select m.ID,
     m.DateAdded,
     m.MaterialNotes
 from Materials as m 
-    join MaterialsStatus ms on m.MaterialStatus = ms.ID
-    join Staff s on m.MaterialStaffReviewer = s.ID
-    join MaterialsPhase mp on m.MaterialPhase = mp.ID
-    join MaterialsSource src on m.MaterialSource = src.ID
+    left join MaterialsStatus ms on m.MaterialStatus = ms.ID
+    left join Staff s on m.MaterialStaffReviewer = s.ID
+    left join MaterialsPhase mp on m.MaterialPhase = mp.ID
+    left join MaterialsSource src on m.MaterialSource = src.ID
 GO
